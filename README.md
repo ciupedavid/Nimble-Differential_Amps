@@ -32,6 +32,7 @@ Setting up the Python path to system variables alleviates the need for using ful
 
 Libraries installation
 In order to run the first script, we need to install ChromeDriver to the folder where the project is located. (Unzip the file in the project path.)
+https://chromedriver.chromium.org/downloads
 The libraries that we used will be installed by opening the comand-line application (Win+R) and typing the following imports:
 
 - pip install selenium
