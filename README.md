@@ -34,8 +34,11 @@ Libraries installation
 In order to run the first script, we need to install ChromeDriver to the folder where the project is located. (Unzip the file in the project path.)
 The libraries that we used will be installed by opening the comand-line application (Win+R) and typing the following imports:
 
-pip install selenium
-pip install pyautogui
-pip install pywinauto
-pip install pandas
-pip install openpyxl
+- pip install selenium
+- pip install pyautogui
+- pip install pywinauto
+- pip install pandas
+- pip install openpyxl
+
+
+NOTE:  The window resolution for chrome is set at 1920 x 1080. The Scale and Layout for the monitor should be at 100%.
