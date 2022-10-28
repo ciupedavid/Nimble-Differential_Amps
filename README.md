@@ -41,5 +41,8 @@ The libraries that we used will be installed by opening the comand-line applicat
 - pip install pandas
 - pip install openpyxl
 
+JSON files:
+The JSON files should be in the same place with the scripts due to the fact that the keys and values from the JSON are read from the current dirrectory so the scripts should not be edited to place the paths.
+
 
 NOTE:  The window resolution for chrome is set at 1920 x 1080. The Scale and Layout for the monitor should be at 100%.
