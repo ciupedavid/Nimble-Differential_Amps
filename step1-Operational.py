@@ -9,7 +9,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from numpy import *
 import math
 import time
-from decimal import Decimal
 
 class TestNimble(unittest.TestCase):
 
@@ -20,7 +19,8 @@ class TestNimble(unittest.TestCase):
 
     def test_export(self):
         driver = self.driver
-        driver.set_window_size(1920, 1080)
+        driver.set_window_position(-1000, 0)
+        driver.maximize_window()
 
         # USER VARIABLES:
         #Sensor
@@ -29,29 +29,8 @@ class TestNimble(unittest.TestCase):
         #Configure Amplifier Stage
         gain = "2"
         device = "LTC6228"
-        rvalue = "500k" # issues when changing from 2.74 to 2.76
-        c2value = "1.5p"
-        
-        #converting kino, Mega
-        d1 = {'k': 1000,'M': 1000000}
-        def text_to_num1(text):
-            if text[-1] in d1:
-                num, magnitude = text[:-1], text[-1]
-                return float(num) * d1[magnitude]
-            else:
-                return Decimal(text)
-        new_rvalue = text_to_num1(rvalue)
-
-        #converting from femto, pico, nano, micro
-        d2 = {'f': 0.000000000000001, 'p':0.000000000001, 'n':0.000000001, 'u':0.000001}
-        def text_to_num2(text):
-            if text[-1] in d2:
-                num, magnitude = text[:-1], text[-1]
-                return float(num) * d2[magnitude]
-            else:
-                return Decimal(text)
-        new_c2value = text_to_num2(c2value)
-        
+        rvalue = 301
+        c2value = (2.7 * 1e-12) #2.7p
         #Configure Filter Stage
         type = "high pass"
         spec = "1st order"
@@ -69,7 +48,7 @@ class TestNimble(unittest.TestCase):
             global rposition
             rposition = minpos + (math.log(value) - minval) / scale
             return (rposition)
-        val_to_pos_rvalue(new_rvalue)
+        val_to_pos_rvalue(rvalue)
         
         # C2 Value to Position
         def val_to_pos_c2value(value):
@@ -81,9 +60,8 @@ class TestNimble(unittest.TestCase):
             global c2position
             c2position = minpos + (math.log(value) - minval) / scale
             return (c2position)
-        val_to_pos_c2value(new_c2value)
+        val_to_pos_c2value(c2value)
 
-        
         # Nimble Beta Website:
         driver.get('https://beta-tools.analog.com/noise/')
         # Accept cookies
@@ -102,8 +80,8 @@ class TestNimble(unittest.TestCase):
         driver.find_element(By.CSS_SELECTOR, "body.ember-application.modal-open:nth-child(2) div.adi-modal:nth-child(4) div.modal.fade.in.show:nth-child(1) div.modal-dialog div.modal-content form.modal-footer div.button-row > button.btn.btn-primary:nth-child(1)").click()
 
         # Drag and Drop Amplifier
-        pyautogui.moveTo(1150, 400, 1)
-        pyautogui.dragTo(1150, 500, button='left', duration=0.5)
+        pyautogui.moveTo(910, 390, 0.2)
+        pyautogui.dragTo(910, 490, button='left', duration=0.2)
         
         # Amp Configuration
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#amp-gain-2"))).clear()
@@ -128,8 +106,8 @@ class TestNimble(unittest.TestCase):
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#config-signal-chain-item-modal > div.modal.fade.in.show > div > div > form > div > button.btn.btn-primary"))).click()
 
         # Drag and drop Load Filther
-        pyautogui.moveTo(1250, 400, 1)
-        pyautogui.dragTo(1250, 500, button='left', duration=0.5)
+        pyautogui.moveTo(1010, 390, 0.2)
+        pyautogui.dragTo(1020, 490, button='left', duration=0.2)
 
         # Configure Filter Stage
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#single-stage-design-button"))).click()
@@ -144,8 +122,11 @@ class TestNimble(unittest.TestCase):
         time.sleep(2)
         filter_slider = driver.find_element(By.CSS_SELECTOR, "#rc-cgov-slider")
         move = ActionChains(driver)
-        move.click_and_hold(filter_slider).move_by_offset(70, 0).release().perform()
+        move.click_and_hold(filter_slider).move_by_offset(60, 0).release().perform()
         time.sleep(2)
+
+        element = driver.find_element(By.CSS_SELECTOR, "#tspan2988-54").text
+        assert element == "10.7kΩ"
 
         # Use this Filter Circuit button
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#config-signal-chain-item-modal > div.modal.fade.in.show > div > div > form > div > button.btn.btn-primary"))).click()
@@ -158,8 +139,8 @@ class TestNimble(unittest.TestCase):
         #WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-container > div.download-area > div.download-individual-buttons > div:nth-child(1) > button:nth-child(2) > span"))).click()
         
         #download all data
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-container > div.download-area > div.download-all-button"))).click()
-        WebDriverWait(driver, 5).until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "#downloading-modal")))
+        #WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-container > div.download-area > div.download-all-button"))).click()
+        #WebDriverWait(driver, 5).until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "#downloading-modal")))
 
     @staticmethod
     def scrollToRValue(value: int, driver):
