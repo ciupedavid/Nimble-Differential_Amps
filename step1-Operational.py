@@ -29,8 +29,29 @@ class TestNimble(unittest.TestCase):
         #Configure Amplifier Stage
         gain = "2"
         device = "LTC6228"
-        rvalue = 301
-        c2value = (2.7 * 1e-12) #2.7p
+        rvalue = "301k"
+        c2value = "2.7p"
+       
+        #converting kino, Mega
+        d1 = {'k': 1000,'M': 1000000}
+        def text_to_num1(text):
+            if text[-1] in d1:
+                num, magnitude = text[:-1], text[-1]
+                return float(num) * d1[magnitude]
+            else:
+                return Decimal(text)
+        new_rvalue = text_to_num1(rvalue)
+
+        #converting from femto, pico, nano, micro
+        d2 = {'f': 0.000000000000001, 'p':0.000000000001, 'n':0.000000001, 'u':0.000001}
+        def text_to_num2(text):
+            if text[-1] in d2:
+                num, magnitude = text[:-1], text[-1]
+                return float(num) * d2[magnitude]
+            else:
+                return Decimal(text)
+        new_c2value = text_to_num2(c2value)
+        
         #Configure Filter Stage
         type = "high pass"
         spec = "1st order"
@@ -48,7 +69,7 @@ class TestNimble(unittest.TestCase):
             global rposition
             rposition = minpos + (math.log(value) - minval) / scale
             return (rposition)
-        val_to_pos_rvalue(rvalue)
+        val_to_pos_rvalue(new_rvalue)
         
         # C2 Value to Position
         def val_to_pos_c2value(value):
@@ -60,7 +81,7 @@ class TestNimble(unittest.TestCase):
             global c2position
             c2position = minpos + (math.log(value) - minval) / scale
             return (c2position)
-        val_to_pos_c2value(c2value)
+        val_to_pos_c2value(new_c2value)
 
         # Nimble Beta Website:
         driver.get('https://beta-tools.analog.com/noise/')
@@ -139,8 +160,8 @@ class TestNimble(unittest.TestCase):
         #WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-container > div.download-area > div.download-individual-buttons > div:nth-child(1) > button:nth-child(2) > span"))).click()
         
         #download all data
-        #WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-container > div.download-area > div.download-all-button"))).click()
-        #WebDriverWait(driver, 5).until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "#downloading-modal")))
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-container > div.download-area > div.download-all-button"))).click()
+        WebDriverWait(driver, 5).until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "#downloading-modal")))
 
     @staticmethod
     def scrollToRValue(value: int, driver):
