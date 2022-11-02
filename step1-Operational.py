@@ -7,32 +7,35 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from numpy import *
-from decimal import Decimal
+import json
 import math
 import time
+from decimal import Decimal
 
 class TestNimble(unittest.TestCase):
 
     def setUp(self):
         # Chrome Driver instance
-        self.driver = webdriver.Chrome()
         #driver = webdriver.Chrome(ChromeDriverManager().install())
+        self.driver = webdriver.Chrome()
+        #with open(r'step1j.json') as d:
+            #self.nimbleData = json.load(d)['Nimble'][0]
+
 
     def test_export(self):
         driver = self.driver
-        driver.set_window_position(-1000, 0)
-        driver.maximize_window()
+        driver.set_window_size(1920, 1080)
 
         # USER VARIABLES:
         #Sensor
         resistance_input = "1"
         capacitance_input = "1f"
         #Configure Amplifier Stage
-        gain = "2"
+        gain = "10"
         device = "LTC6228"
-        rvalue = "301k"
-        c2value = "2.7p"
-       
+        rvalue = "2.05k" #1.43M
+        c2value = "1.2n" #820f, 330p, 39n
+        
         #converting kino, Mega
         d1 = {'k': 1000,'M': 1000000}
         def text_to_num1(text):
@@ -56,7 +59,7 @@ class TestNimble(unittest.TestCase):
         #Configure Filter Stage
         type = "high pass"
         spec = "1st order"
-        filter_freq = 100 #100hz
+        filter_frequency = 100 #100hz #change to 0 if no Filther is requited
         circuit_RC = "1.07kΩ"
 
         # RVALUE Value to Position
@@ -84,6 +87,7 @@ class TestNimble(unittest.TestCase):
             return (c2position)
         val_to_pos_c2value(new_c2value)
 
+        
         # Nimble Beta Website:
         driver.get('https://beta-tools.analog.com/noise/')
         # Accept cookies
@@ -106,6 +110,7 @@ class TestNimble(unittest.TestCase):
         pyautogui.dragTo(910, 490, button='left', duration=0.2)
         
         # Amp Configuration
+        time.sleep(1)
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#amp-gain-2"))).clear()
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#amp-gain-2"))).send_keys(gain)
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#amp-gain-2"))).send_keys(Keys.ENTER)
@@ -126,35 +131,39 @@ class TestNimble(unittest.TestCase):
 
         # Use this Amplifier button
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#config-signal-chain-item-modal > div.modal.fade.in.show > div > div > form > div > button.btn.btn-primary"))).click()
-
-        # Drag and drop Load Filther
-        pyautogui.moveTo(1010, 390, 0.2)
-        pyautogui.dragTo(1020, 490, button='left', duration=0.2)
-
-        # Configure Filter Stage
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#single-stage-design-button"))).click()
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#hp-se-wiring-button"))).click()
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#filter-order-radio-group > div:nth-child(1) > label > input[type=radio]"))).click()
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#fp-input"))).send_keys(Keys.CONTROL + "a")
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#fp-input"))).send_keys(Keys.DELETE)
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#fp-input"))).send_keys(filter_freq)
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#config-signal-chain-item-modal > div.modal.fade.in.show > div > div > div.modal-body > div > div.top-area > section.config-section > div > div.sub-tab-content-container > button.tab-button-area.enabled.next"))).click()
         
-        # Load Filter slider value
-        time.sleep(2)
-        filter_slider = driver.find_element(By.CSS_SELECTOR, "#rc-cgov-slider")
-        move = ActionChains(driver)
-        move.click_and_hold(filter_slider).move_by_offset(60, 0).release().perform()
-        time.sleep(2)
+        def drag_filter():
+            # Drag and drop Load Filther
+            pyautogui.moveTo(1010, 390, 0.2)
+            pyautogui.dragTo(1020, 490, button='left', duration=0.2)
 
-        #element = driver.find_element(By.CSS_SELECTOR, "#tspan2988-54").text
-        #assert element == "10.7kΩ"
+            # Configure Filter Stage
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#single-stage-design-button"))).click()
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#hp-se-wiring-button"))).click()
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#filter-order-radio-group > div:nth-child(1) > label > input[type=radio]"))).click()
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#fp-input"))).send_keys(Keys.CONTROL + "a")
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#fp-input"))).send_keys(Keys.DELETE)
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#fp-input"))).send_keys(filter_frequency)
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#config-signal-chain-item-modal > div.modal.fade.in.show > div > div > div.modal-body > div > div.top-area > section.config-section > div > div.sub-tab-content-container > button.tab-button-area.enabled.next"))).click()
+            
+            # Load Filter slider value
+            time.sleep(2)
+            filter_slider = driver.find_element(By.CSS_SELECTOR, "#rc-cgov-slider")
+            move = ActionChains(driver)
+            move.click_and_hold(filter_slider).move_by_offset(70, 0).release().perform()
+            time.sleep(2)
 
-        # Use this Filter Circuit button
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#config-signal-chain-item-modal > div.modal.fade.in.show > div > div > form > div > button.btn.btn-primary"))).click()
+            # Use this Filter Circuit button
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#config-signal-chain-item-modal > div.modal.fade.in.show > div > div > form > div > button.btn.btn-primary"))).click()
+        if (filter_frequency != 0):
+            drag_filter()
+        else:
+            print("No filther was added.")
         
+        time.sleep(3)
         #Select Next Steps tab
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-tab"))).click()
+        time.sleep(2)
 
         #download data
         #WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-container > div.download-area > div.download-individual-buttons > div:nth-child(1) > button:nth-child(1) > span"))).click()
