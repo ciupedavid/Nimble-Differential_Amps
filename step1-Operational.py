@@ -24,7 +24,8 @@ class TestNimble(unittest.TestCase):
 
     def test_export(self):
         driver = self.driver
-        driver.set_window_size(1920, 1080)
+        driver.set_window_position(-1000, 0)
+        driver.maximize_window()
 
         # USER VARIABLES:
         #Sensor
