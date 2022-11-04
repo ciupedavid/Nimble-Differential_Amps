@@ -1,0 +1,15 @@
+{
+"Nimble": [
+    {
+        "resistance_input": "1",
+	"capacitance_input": "1f",
+	"gain": "1",
+	"device": "ADA4945-1",
+	"scale_selector": "1000",
+		"c1_scale": "1",
+        "filter_frequency": "200",
+	"rc_scale": "10000",
+		"rc3_scale": "2151"
+    }
+]
+}
