@@ -1,0 +1,10 @@
+{
+"Nimble": [
+    {
+        "resistance_input": "1",
+	"capacitance_input": "1f",
+	"gain": "5",
+	"device": "AD8235"
+    }
+]
+}
