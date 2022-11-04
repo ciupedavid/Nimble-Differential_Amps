@@ -77,8 +77,3 @@ class TestNimble(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-# WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, ""))).click()
-
-# ada4254
-# 1/16
