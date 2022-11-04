@@ -57,11 +57,7 @@ class TestNimble(unittest.TestCase):
         time.sleep(0.5)
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-tab"))).click()
         time.sleep(1)
-        # url = driver.current_url()
-        # f=open('deviceurl.txt','a')
-        # f.write(url)
-        # f.close()
-        l= driver.current_url
+        l = driver.current_url
         device_url = self.nimbleData['device']+'URL.txt'
         with open(device_url, 'w') as f:
             f.write(l)
