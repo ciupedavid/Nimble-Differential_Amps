@@ -5,9 +5,9 @@
 	"capacitance_input": "1f",
 	"gain": "10",
 	"device": "AD8220",
-      "current_date": "November 7, 2022",
+      "current_date": "November 11, 2022",
       "downloads_path": "C:\\Users\\davciupe\\Downloads\\",
-      "ltspice": "C:\\Users\\davciupe\\PycharmProjects\\pythonProject\\"
+      "project_location": "C:\\Users\\davciupe\\PycharmProjects\\pythonProject\\"
     }
 ]
 }

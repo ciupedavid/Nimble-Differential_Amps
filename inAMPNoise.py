@@ -2,22 +2,13 @@ import unittest
 import pyautogui
 import os
 import shutil
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from mpmath import *
-import math
-import numpy as np
-
 import time
-
 import json
-# This script downloads the Nimble data and LTSpice data from Beta-tools-analog
-# Note: This script uses PYAUTOGUI which controls the mouse for the drag and drop action.
-# While this script is running, please do not move the mouse
 
 class TestNimble(unittest.TestCase):
 
@@ -52,17 +43,14 @@ class TestNimble(unittest.TestCase):
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#amp-gain-2"))).send_keys(Keys.ENTER)
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#tspan2988-5"))).click()
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#filter-0"))).send_keys(self.nimbleData['device'])
+        time.sleep(1)
         driver.execute_script("document.querySelector('div.slick-cell.l0.r0.frozen').click();")
         driver.execute_script("document.querySelector('.modal-footer button.btn-primary').click();")
-        time.sleep(0.2)
+        time.sleep(1)
         driver.execute_script("document.querySelector('.modal-footer button.btn-primary').click();")
-        time.sleep(0.5)
+        time.sleep(1)
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#next-steps-tab"))).click()
         time.sleep(1)
-        # url = driver.current_url()
-        # f=open('deviceurl.txt','a')
-        # f.write(url)
-        # f.close()
         device = self.nimbleData['device']
         downloads_path = self.nimbleData['downloads_path']
         gain = self.nimbleData['gain']
@@ -91,7 +79,7 @@ class TestNimble(unittest.TestCase):
         nimble_download_path = downloads_path + 'Raw Data Export - ' + current_date + '.zip'
         shutil.move(nimble_download_path, project_path + '/' + device)
         device_download_path = device + 'URL G' + gain + '.txt'
-        shutil.move(device_download_path ,project_path + '/' + device)
+        shutil.move(device_download_path, project_path + '/' + device)
         # shutil.move(os.path.join(device_download_path, device + 'URL G' + gain + '.txt'), os.path.join(project_path + '\\' + device, device + 'URL G' + gain + '.txt'))
         time.sleep(1)
 
