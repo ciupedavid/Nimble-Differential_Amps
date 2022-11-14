@@ -1,0 +1,8 @@
+chromedriver_autoinstaller==0.4.0
+mpmath==1.2.1
+numpy==1.23.2
+openpyxl==3.0.10
+pandas==1.4.3
+PyAutoGUI==0.9.53
+pywinauto==0.6.8
+selenium==3.141.0
