@@ -1,0 +1,17 @@
+{
+"Nimble": [
+    {
+        "resistance_input": "1",
+	"capacitance_input": "1f",
+	"gain": "10",
+	"device": "AD8220",
+      "current_date": "November 14, 2022",
+      "downloads_path": "C:\\Users\\davciupe\\Downloads\\",
+      "project_location": "C:\\Users\\davciupe\\PycharmProjects\\pythonProject\\",
+      "x_axis_min": "100",
+      "x_axis_max": "10000000",
+      "y_axis_min": "1",
+      "y_axis_max": "100000"
+    }
+]
+}
