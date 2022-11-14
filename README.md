@@ -1,12 +1,14 @@
 # Nimble-Differential_Amps
 
 Python & Libraries Install
-Install
+
+
+Install:
 Go to the following link to download and install Python.
 https://www.python.org/downloads/windows/
 
 
-Verify
+Verify:
 To check if you already have Python on your Windows machine open the command-line applicaiton:
 
 1. Press Win + R
@@ -16,7 +18,7 @@ To check if you already have Python on your Windows machine open the command-lin
 Using the --version switch will show you the version that’s installed. If you see a version less than 3.9.13, which was the most recent version at the time of writing, then you’ll want to upgrade your installation.
 
 
-Add Python Path to Environment Variables
+Add Python Path to Environment Variables:
 Setting up the Python path to system variables alleviates the need for using full paths. It instructs Windows to look through all the PATH folders for “python” and find the install folder that contains the python.exe file.
 
 1. Press Win + R
@@ -30,16 +32,14 @@ Setting up the Python path to system variables alleviates the need for using ful
 9. Click OK and close all windows
 
 
-Libraries installation
-In order to run the first script, we need to install ChromeDriver to the folder where the project is located. (Unzip the file in the project path.)
-https://chromedriver.chromium.org/downloads
-The libraries that we used will be installed by opening the comand-line application (Win+R) and typing the following imports:
+Libraries installation:
+In order to install the libraries, we need to follow the next steps:
+- Go to the project folder
+- Click on the project path
+- Type: cmd and press enter(the cmd prompt will be displayed with the project location)
+- Type: pip install -r requirements.txt and press enter
+All the libraries that are included in the project will be installed.
 
-- pip install selenium
-- pip install pyautogui
-- pip install pywinauto
-- pip install pandas
-- pip install openpyxl
 
 JSON files:
 The JSON files should be in the same place with the scripts due to the fact that the keys and values from the JSON are read from the current dirrectory so the scripts should not be edited to place the paths.
